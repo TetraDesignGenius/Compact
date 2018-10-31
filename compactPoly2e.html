@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <title>TetraGenius: © Copyright 2018 by Stellenbosch University: Department of Industrial Engineering:</title>
+    <!-- © Copyright 2018 Theunis Gysbert Dirkse-van Schalkwyk & Stellenbosch University 
+   
+    --> 
+    <meta charset="utf-8">
+    <meta name="sassword" content="10100010010001001000100000111010101001110010101101010010">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+</head>
+
+
+	<body>
+		
+<script type="text/javascript"  src="three.js"></script>
+<script type="text/javascript" src="ConvexGeometry.js"></script>
+<script type="text/javascript" src="KeyboardState.js"></script>
+<script type="text/javascript" src="THREEx.WindowResize.js"></script>
+<script type="text/javascript" src="colorpicker.js"></script>
+<script type="text/javascript" src="Projector.js"></script>
+<script type="text/javascript" src="Detector.js"></script>
+<script type="text/javascript" src="TrackballControls.js"></script>
+<script type="text/javascript" src="THREEx.FullScreen.js"></script>
+<script type="text/javascript" src="mesh.js"></script>
+  
+
+    
+    <html>
+        
+    
+
+<script type="text/javascript" src="DATGUImin.js"></script>
+
+
+<!-- <IMG STYLE="position:absolute; TOP:135px; LEFT:170px; WIDTH:50px; HEIGHT:50px" SRC="Dirk_se_pic/circle.gif"> --> 
+
+<div id="ThreeJS" style="position: absolute; right:0px; bottom:0px"></div>  <!-- Black screen background for threejs -->
+	
+<!-- Code to display an information button and box when clicked. 
+<script type="text/javascript" src="jquery-1.9.1.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+<link rel=stylesheet href="jquery-ui.css" /> 
+<link rel=stylesheet href="info.css"/> 
+<script type="text/javascript" src="info.js"></script>
+
+<div id="infoButton"></div>
+<div id="infoBox" title="Additional Controls">
+<p>Mouse-over faces to select (White Sphere) and click to add a Tetra design element.</p>
+<p>To create a useful design, you need to think about what you want!</p>
+<p>Right click to remove a Tetra design element!</p>
+<p>Left click open space to rotate. </p>
+	<p>Right click open space to drag. </p>
+	<p>Mouse wheel to zoom.</p>
+	<p>Click on Close Controls to minimise.</p>
+	<p>M - Fullscreen and Esc- Normal screen.</p>
+	<p>Symetric Design mode, designs, 3D option and colours may be changed in the controls top right corner.</p>
+	<p>Move the current rotating Tetra to a suitable position using the ARROW keys.</p>
+	<p>Add a Tetra to apply color change to new Tetras.</p>
+	<p> Rotate the current Tetra using X Y Z keys. This is useful for the globe and bal designs.</p>
+	</div>
+	
+</p> -->
+<script type="text/javascript" src="TGa.js"> </script>
+<script>
+//use sed to customise code based on username/password, amd-three and receive.js view-source:http://felixpalmer.github.io/amd-three.js/
+//note to pass var to server
+//I can't believe my answer was deleted and I was accused of thread highjacking! Below is a totally viable method to send javascript variable to any server-side language without the need to use third party libraries like ajax or jquery!
+
+//http://www.sitepoint.com/forums/show...script-Refresh19
+
+//Javascript:
+
+//var name="anonymous"
+//changeScript("/index.php?name="+name);
+
+//Server coded Javascript: (/index.php)
+
+//name=$_GET["name"];
+//$_SESSION["name"]=name;
+
+//header("ContentType: application/x-javascript");
+//header("Cache-Control: no-cache");
+//header("Expires: -1");
+
+//echo "alert(\\"".$_SESSION["name"]."\\");";
+
+
+// MAIN
+
+
+// http://math.hws.edu/graphicsbook/c5/s3.html
+// Check for the various File API support.
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  // Great success! All the File APIs are supported.
+  console.log("method YESSSSSSSSSSSSS");
+} else {
+  console.log("The File APIs are not fully supported in this browser.");
+}
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			//console.log("starting");
+			console.log("starting");
+function toggleDiv(el) {
+  if (document.getElementById(el).style.display == 'none') {
+    document.getElementById(el).style.display = ''
+  } else {
+    document.getElementById(el).style.display = 'none'
+  }
+}
+	
+//savedFiles[0] = '. ';
+//userLocalName[0] = 'NONE';
+
+
+//userLocalPass[0] = '***.......**';
+
+			init();
+			animate();
+			
+			
+
+			
+			function onDocumentKeyDown(event){ 
+                // Get the key code of the pressed key 
+               keyCode = event.which; 
+               //console.log("keycode" + keyCode);
+		   }
+		   function onDocumentKeyUp(event){ 
+                // Get the key code of the pressed key 
+               keyCodeUp = event.which; 
+               //console.log("keycode" + keyCode);
+		   }
+
+
+
+
+
+
+
+		   
+	//---------------------------------------------------------------------------------------------------------------------------------------
+
+
+function loadALL()
+{
+  if (localStorage.getItem("USERS") === null) {
+  	numUsers = 1;
+	numUserL = 0;
+	userLocalName[0]= 'NONE';
+	savedFiles= ['. ','No file'];
+	numSavedFiles=2;
+	current = ['NONE','No file',0]; //User, File, UserNr
+	console.log(numSavedFiles , "  HoWWW1111111111111111111   ",userLocalName[0])
+		   
+	    var USERS = [{
+			"current" : current,
+			"userLocalName" : ["NONE"],
+			"numUsers" : numUsers,
+			//"userLocalPass" : "**************QWERTUIOPASDFGHJKLZXCVBNMQAZWSXEDCRFVTGBYHNUJMIKOLP*****************"+userLocalPass,
+			//"Rainbow" : 'OFF',
+			"savedFiles" : savedFiles,
+			//"tetraName" : tetraName
+			}];
+		userObject = JSON.stringify(USERS, null, 100);
+		var fileUser = 'USERS';//userLocalName[numUserL];
+		localStorage.setItem(fileUser, userObject);	
+		uLocalName = current[0];
+} 
+							console.log(numSavedFiles , "  HoWWWW00000000000000 ",savedFiles[1])
+}
+
+function init()  //.............................................................................................................Start here..................................
+{
+	
+		if (localStorage.getItem("USERS") === null) {
+  
+	loadALL();
+
+} else {
+	//if(localStorage.getItem("USERS").length >0)
+								//{
+								var retrievedObjectU = localStorage.getItem("USERS");
+								var USERS = JSON.parse(retrievedObjectU);
+								//Rainbow = USERS[0].Rainbow;
+								numSavedFiles = USERS[0].savedFiles.length;
+								numUsers = USERS[0].userLocalName.length;
+								userLocalName =  USERS[0].userLocalName;
+								
+								current = USERS[0].current;
+								numUserL = current[2];
+								console.log(numSavedFiles , "  HoWWWW2222222222222222222")
+								//for (var i = 1; i < numSavedFiles; i++) {
+								  //savedFiles[i+1]= USERS[0].savedFiles[i];  //USERS[0].savedFiles;
+							//	}
+							uLocalName=current[0];
+
+							savedFiles=USERS[0].savedFiles;
+							currentFile = current[1];
+							console.log(currentFile , "  ", uLocalName,"   ",numUserL)
+								} //
+								
+	ray = new THREE.Raycaster();
+	mouse = new THREE.Vector2;
+
+							
+console.log(numSavedFiles , "  HoWWWW00000000000000 ",savedFiles[1])
+	
+	material11.side = THREE.DoubleSide
+	//designs = ['models/obj/Tetra12.obj', 'models/obj/T3.obj','models/obj/cube3.obj', 'models/obj/Tetra10.obj', 'models/obj/Tetra8.obj']; BumpSurfStampA2.obj ipo flower2 
+	//also change lines: 400,800 Tetra12 is original
+		console.log(designs[0]+":   "+ designs[1]+":  " + designs[2]+":   "+ designs[3]+":  " + designs[4]+":   "+ designs[5]);
+                floatingDiv = document.createElement( 'div' ); ///to save a file
+				floatingDiv.className = 'floating';
+				document.body.appendChild( floatingDiv );
+
+projector = new THREE.Projector();
+	
+	
+
+            
+	// SCENE
+	scene = new THREE.Scene();
+	//backgroundScene = new THREE.Scene();   //bgc : may be removed    
+  
+	// CAMERA
+	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.01, FAR = 20000;
+	//backgroundCamera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);  //bgc : may be removed   
+	var bgc = "no"; 
+	if(bgc == "yes"){}
+		
+	if(bgc == "no"){			
+	var reflectionCube = new THREE.CubeTextureLoader()
+					//.setPath( 'textures/cube/MilkyWay/' )
+					.load( [ 'dark-s_px.jpg', 'dark-s_nx.jpg', 'dark-s_py.jpg', 'dark-s_ny.jpg', 'dark-s_pz.jpg', 'dark-s_nz.jpg' ] );
+					//.setPath( 'textures/' )
+					//.load( [ 'sky.jpg', 'sky.jpg', 'sky.jpg', 'sky.jpg', 'sky.jpg', 'dark-s_nz.jpg' ] );
+				reflectionCube.format = THREE.RGBFormat;}
+				
+	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+	// instantiate a listener 
+	//var audioListener = new THREE.AudioListener();
+
+// add the listener to the camera
+//camera.add( audioListener );
+
+// instantiate audio object
+/*var MusicTG = new THREE.Audio( audioListener );
+
+
+// add the audio object to the scene
+scene.add( MusicTG );
+
+// instantiate a loader
+var loader = new THREE.AudioLoader();
+
+// load a resource
+loader.load(
+    // resource URL
+    "1.mp3",
+    // Function when resource is loaded
+    function ( audioBuffer ) {
+        // set the audio object buffer to the loaded object
+        MusicTG.setBuffer( audioBuffer );
+        MusicTG.setLoop(true);
+
+        // play the audio
+        MusicTG.play();
+        //MusicTG.stop();
+    },
+    // Function called when download progresses
+    function ( xhr ) {
+        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    },
+    // Function called when download errors
+    function ( xhr ) {
+        console.log( 'An error happened' );
+    });*/
+
+	// Put in two cameras
+cameraLeft = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+cameraLeft.position.set( 0, 0, 3 );
+cameraLeft.position.set(0.1,-2.50,-30.195);
+	cameraLeft.lookAt(scene.position);
+scene.add(cameraLeft);
+
+cameraRight = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+cameraRight.position.set( 0, 0, 3 );
+cameraRight.position.set(-0.1,-2.50,-30.195);
+	cameraRight.lookAt(scene.position);
+scene.add(cameraRight);
+	
+	scene.add(camera);
+
+	//scene.background = reflectionCube;
+
+	camera.position.set(0,10.50,-30.195);
+	camera.lookAt(scene.position);	
+	
+	
+	// RENDERER
+	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+	if ( Detector.webgl )
+		renderer = new THREE.WebGLRenderer( {antialias:true} );
+		
+	else
+		renderer = new THREE.CanvasRenderer(); 
+		renderer.setClearColor( 0x000000 );
+	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	container = document.getElementById( 'ThreeJS' );
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	renderer.gammaInput = true;
+	renderer.gammaOutput = true;
+	container.appendChild( renderer.domElement );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener("keydown", onDocumentKeyDown, false); 
+	document.addEventListener("keyup", onDocumentKeyUp, false); //("keyup", this._onKeyUp, false);
+	document.addEventListener("keyup", function(object) {  // Audio
+    audio.play();
+  });
+	// EVENTS
+	
+	THREEx.WindowResize(renderer, camera);
+	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
+	// CONTROLS
+
+	controls = new THREE.TrackballControls( camera, renderer.domElement );
+	//controls = new THREE.TrackballControls( camera );
+	renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener("keydown", onDocumentKeyDown, false); 
+	document.addEventListener("keyup", onDocumentKeyUp, false); //("keyup", this._onKeyUp, false);
+	
+	
+
+	// Lights
+
+				var ambientLight = new THREE.AmbientLight( 0xbbbbbb );
+				
+			lightsP[ 0 ] = new THREE.AmbientLight( 0xffffff );
+			lightsP[ 0 ].intensity = 0.5;
+			lightsP[ 1 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+			lightsP[ 2 ] = new THREE.PointLight( 0xffffff, 1, 0 );
+			lightsP[ 1 ].intensity = 0.5;
+			lightsP[ 2 ].intensity = 0.5;
+
+			lightsP[ 0 ].position.set( 0, 200, 0 );
+			lightsP[ 1 ].position.set( 100, 200, 100 );
+			lightsP[ 2 ].position.set( - 100, - 200, - 100 );
+
+			scene.add( lightsP[ 0 ] );
+			scene.add( lightsP[ 1 ] );
+			scene.add( lightsP[ 2 ] );
+
+				var directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+				directionalLight.position.set( 1, 551, 1 ).normalize();
+				scene.add( directionalLight );
+				var pointLight = new THREE.PointLight( 0xffffff, 2, 800 );
+
+	
+	////////////
+	// CUSTOM //
+	////////////
+  var newSphereGeom= new THREE.SphereGeometry(0.50,0.50,0.50);
+    var color1 = new THREE.Color( 'skyblue' );
+    var mesh2 = new THREE.Mesh( newSphereGeom, color1 );
+
+      		mesh2.position.x = 0;
+					mesh2.position.y = 200;
+					mesh2.position.z = 500;
+	
+	scene.add(mesh2);
+	console.log("flag1");
+	ci = 1;
+	cii = 1;
+	materials[cii] = material15;
+
+
+
+ 
+  
+ // updateCube();
+  	gui = new dat.GUI();
+	
+	parameters = 
+	{
+		
+		x: 0, y: 30, z: 0,
+		color: "#eeeeee", // color (change "#" to "0x")
+		opacity: 1, 
+		REMOVE_DESIGN: "",
+		Xsym: "OFF",  //initial value with i
+		Ysym: "OFF",
+		Zsym: 3,
+		Doption: "OFF",
+		Rainbow: "Random",
+		//TransparentBlock: "False",
+		addTetraName: "Original",
+		addTetraName2R: "",
+		addTetraName2: "",
+		addTetraName3: "",
+		addTetraName4: "",
+		addTextureName: "",
+		Load2: ". ",
+		LoadC: ". ",
+		DelFile: ". ",
+		uLocalName: uLocalName,
+		uLocalSelect: " ",
+		saveOBJ2: " ",
+		visible: "1",
+		//material: "Phong",
+		//reset: function() { resetCube() }
+	};
+	text = 
+	{
+		Save_filename: "MyDesign",
+		C_filename: "",
+		Load_filename:  "",
+		D_filename: "",
+		USER_Name:uLocalName,
+		USER_Select:"NONE"
+	//	UserPassword:""
+	};
+
+Xsym = "OFF";
+Ysym = "OFF";
+Zsym = 3;
+
+cubeColor = gui.addColor( parameters, 'color' ).name('Color').listen();
+		var lth = uLocalName.length;	
+folder1 = gui.addFolder('  USER SETTINGS  ');
+
+	var rload = folder1.add( parameters, 'REMOVE_DESIGN', [ "Restart!", "Design", "Game Levels", "Sfere's only" ] ).name('MODE').listen();  
+		var cubeX = folder1.add( parameters, 'Xsym', [ "OFF", "ON" ] ).name('Xsymmetry').listen();  
+		var cubeY = folder1.add( parameters, 'Ysym', [ "OFF", "ON" ] ).name('Ysymmetry').listen();  
+		var cubeZ = folder1.add( parameters, 'Zsym', [ 0.1,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2 ] ).name('Light Intensity').listen();  
+		var cubeD = folder1.add( parameters, 'Doption', [ "OFF", "Anaglyph", "Side-by-Side" ] ).name('3 D view').listen();  
+		var varyColor = folder1.add( parameters, 'Rainbow', [ "OFF", "Random", "Greens", "Reds","Blues","Greys","Yellow/Blue" ] ).name('Random Colors').listen(); 
+		//var TBlock = folder1.add( parameters, 'TransparentBlock', [ "True", "False" ] ).name('Transparent').listen(); 
+		//designs = ['models/obj/pipe2.obj', 'models/obj/Tetra4.obj','models/obj/cube3.obj', 'models/obj/Tetra10.obj', 'models/obj/Tetra8.obj','models/obj/circle5.obj'];
+		var Design = folder1.add( parameters, 'addTetraName', tNames).name('Solid Designs').listen();   //[ " ","Original", "Geometric","Spiral","Pipes", "Clipped", "Cubes", "TetraFrame","TetraMag","Flower","Triangles","TetraClip","Esher Stair","Old Style","FlatPack","Cubic","Modern","DNA segment","Interlock","Dragon","Torus"] ).name('Designs 1').listen();  
+		var Design2R = folder1.add( parameters, 'addTetraName2R', [" ", "Sphere0", "Sphere1","Sphere2", "Sphere3","Sphere4"] ).name('Spheres and pipes').listen();  
+		var Design2 = folder1.add( parameters, 'addTetraName2', [" ", "Globe1", "Globe2","Globe3", "Globe4","Globe5", "Globe6"] ).name('Globe').listen();  
+		var Design3 = folder1.add( parameters, 'addTetraName3', [" ", "QuadTri","HalfTetra","Metalic1","Metalic2"] ).name('Frame Designs').listen();  
+		var Design4 = folder1.add( parameters, 'addTetraName4', [" ", "","HalfTetra","Metalic1","Metalic2"] ).name('Art Designs').listen();  
+		var Design5 = folder1.add( parameters, 'addTextureName', texNames).name('Textures').listen(); 
+		var MLoad2 = folder1.add( parameters, 'visible', ["Silence","1","2","3","4","5","6","7","8","9","10"]).name('Listen to music').listen();  
+		//var saveOO = folder1.add( parameters, 'saveOBJ1', [" ", " Save... "] ).name('Save').listen();  
+		
+		
+		var yFile = 0;
+		console.log(numSavedFiles , "  Ho1",lth,"       userL ", savedFiles[1].slice(0,lth))
+		for (var i = 1; i < numSavedFiles; i++) {//---------------------POPULATE FILES from LOCALUSER-----------------
+			//var fnnn=savedFiles[i].length;
+			if(savedFiles[i].slice(0,lth) == uLocalName){
+				var ltx = savedFiles[i].length;
+				yFile++
+				activeFiles[yFile-1] = savedFiles[i].slice(lth-ltx);
+				console.log(savedFiles[i] , "  YEA",i,"       userL ", savedFiles[1].slice(0,4))
+				//yFile++
+			}
+			if(savedFiles[1] == "No file"){
+				activeFiles = [". ", "No file"];
+			}
+		}
+		userLocalName[numUserL]=uLocalName;
+		//uLocalName="NONE";
+		console.log(yFile , "  Ho2",lth,"    activeFiles ", activeFiles[0],"   uln ",uLocalName)					
+		console.log(yFile , "  Ho2",lth,"    activeFiles ", activeFiles[1],"   uln ",uLocalName)
+	//folder1.open();
+	var f2 = gui.addFolder('Save Design');
+		f2.add(text, 'Save_filename');
+		var saveO2 = f2.add( parameters, 'saveOBJ2', [" ", " Save... "] ).name('Save').listen(); 
+		//f2.open();
+		
+		console.log(numSavedFiles , "  Ho3",lth,"       userL ", savedFiles[1])
+		var f3 = gui.addFolder('Load Design');
+		f3.add(text, 'Load_filename');
+		var DesignLoad2 = f3.add( parameters, 'Load2', activeFiles ).name('Load Designs').listen(); 
+		//f3.open();
+		
+		var f4 = gui.addFolder('Load Colours');
+		f4.add(text, 'C_filename');
+		var CLoad2 = f4.add( parameters, 'LoadC', activeFiles ).name('Load Colours').listen(); 
+		
+		var f5 = gui.addFolder('Delete Saved Design');
+		f5.add(text, 'D_filename');
+		var delF = f5.add( parameters, 'DelFile', activeFiles ).name('Delete Saved Design').listen(); 
+		
+		var f6 = gui.addFolder('Create or select a USER');
+		f6.add(text, 'USER_Name');
+		var uLN = f6.add( parameters, 'uLocalName', [" ", "Create_User"] ).name('Create USER').listen();
+		var uLChoose = f6.add( parameters, 'uLocalSelect', userLocalName ).name('Select USER').listen();
+		//parameters.uLocalName = userLocalName;
+			for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}
+		//nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+		//localStorage.removeItem(". ");
+		uLN.onChange(function(value) //User Function Create and Select--------------------------CREATE USER------------------------CREATE USER
+	{   
+	  //gui.close();
+	  if(value == "Create_User")
+	  {
+	    console.log('CRaaaeteeeee!    aasasassasasaaaafffffff');
+	    numUsers +=1;
+	    numUserL = numUsers-1;  //for 4 users, the numbers are 0-3 !!
+		userLocalName[numUserL]= text.USER_Name;
+		current[0] = userLocalName[numUserL];
+		current[2] = numUserL;
+		var fileNameTet = text.Save_filename;
+		var savename = userLocalName[numUserL]+fileNameTet;
+		current[1] = savename;
+		//text.USER_Name=userLocalName[numUserL];
+	    
+	    var USERS = [{
+			"current" : current,
+			"userLocalName" : userLocalName,
+			"numUsers" : numUsers,
+			//"userLocalPass" : "**************QWERTUIOPASDFGHJKLZXCVBNMQAZWSXEDCRFVTGBYHNUJMIKOLP*****************"+userLocalPass,
+			//"Rainbow" : Rainbow,
+			"savedFiles" : savedFiles
+			//"tetraName" : tetraName
+			}];
+		userObject = JSON.stringify(USERS, null, 100);
+		var fileUser = 'USERS';//userLocalName[numUserL];
+		localStorage.setItem(fileUser, userObject);	
+	  }
+		//userLocalName
+		//f6.uLChoose.updateDisplay();
+		var retrievedObjectU = localStorage.getItem("USERS");
+								var USERS = JSON.parse(retrievedObjectU);
+								//Rainbow = USERS[0].Rainbow;
+								numSavedFiles = USERS[0].savedFiles.length;
+								numUsers = USERS[0].userLocalName.length;
+								current = USERS[0].current;
+								numUserL = current[2];
+								currentFile = current[1];
+								uLocalName = current[0];
+								console.log(numSavedFiles , "  HoWWWWWWW444444444444444444")
+								//for (var i = 1; i < numSavedFiles; i++) {
+								  //savedFiles[i+1]= USERS[0].savedFiles[i];  //USERS[0].savedFiles;
+							//	}
+							savedFiles=USERS[0].savedFiles;
+							userLocalName=USERS[0].userLocalName;
+
+							parameters.Load2 = savedFiles;
+		parameters.LoadC = savedFiles;
+		parameters.DelFile = savedFiles;
+		parameters.uLocalSelect = userLocalName[numUserL];
+		CLoad2.updateDisplay()
+		window.location.reload(false);
+		
+	//updateGuiT();
+	//init();
+	//gui.open();
+						
+	});
+	
+		/*var f7 = gui.addFolder('Select USER');
+		f7.add(text, 'USER_Select');
+		var uLChoose = f7.add( parameters, 'uLocalSelect', userLocalName ).name('Select USER').listen();*/
+		//parameters.uLocalName = userLocalName;
+		/*	for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}*/
+		//nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+		//localStorage.removeItem(". ");
+		uLChoose.onChange(function(value) //User Function Create and Select
+	{   
+	  
+	  //if(value != "Create" & value != "NONE"){
+	   for (var i = 0; i < numUsers; i++) {
+	   if(value == userLocalName[i]){numUserL=i;}
+	    }
+	  	//	 userLocalName[numUserL-1]= text.USER_Name;
+		parameters.uLocalName = userLocalName[numUserL];
+		uLocalName = userLocalName[numUserL];
+		text.USER_Name=userLocalName[numUserL];
+		console.log(numUserL, "current and total users is", numUsers)
+		current[0]=uLocalName;
+		current[2]=numUserL;
+		current[1]=". ";
+
+		var USERS = [{
+			"current" : current,
+			"userLocalName" : userLocalName,
+			"numUsers" : numUsers,
+			//"userLocalPass" : "**************QWERTUIOPASDFGHJKLZXCVBNMQAZWSXEDCRFVTGBYHNUJMIKOLP*****************"+userLocalPass,
+			//"Rainbow" : Rainbow,
+			"savedFiles" : savedFiles
+			//"tetraName" : tetraName
+			}];
+		userObject = JSON.stringify(USERS, null, 100);
+		var fileUser = 'USERS';//userLocalName[numUserL];
+		localStorage.setItem(fileUser, userObject);	
+	
+	  //}
+		
+	   
+		parameters.Load2 = savedFiles;
+		parameters.LoadC = savedFiles;
+		parameters.DelFile = savedFiles;
+		parameters.uLocalSelect = userLocalName[numUserL];
+		//parameters.uLocalPass = "*****....********"
+
+			for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}
+			console.log(".........",savedFiles[1],"........",savedFiles[2], "....",userLocalName[numUserL]);
+			window.location.reload(false);
+		
+						
+	});
+	//	var f7 = gui.addFolder('USER Password');
+	//	f7.add(text, 'UserPassword');
+	//	var uLN = f7.add( parameters, 'uLocalPass', [" ", "Save Password"] ).name('Enter Password').listen(); 
+	
+
+		rload.onChange(function(value)
+		{
+		  if(value == "Restart!"){window.location.reload(false);}
+		  if(value == "Design"){window.location.replace("file:////home/theunsdirkse-vanschalkwyk/Documents/TetraGenius/examples/TetraGeniusV008.Load.html");}
+		  if(value == "Game Levels"){window.location.replace("file:////home/theunsdirkse-vanschalkwyk/Documents/TetraGenius/examples/TetraGeniusV008.Game.html");}
+		  if(value == "Sfere's only"){window.location.replace("file:////home/theunsdirkse-vanschalkwyk/Documents/TetraGenius/examples/compact.html");}
+		 });
+	
+	cubeX.onChange(function(value) 
+	{   Xsym = value; }); 
+	cubeY.onChange(function(value) 
+	{   Ysym = value; }); 
+	cubeZ.onChange(function(value) 
+	{   Zsym = value; 
+		lightsP[ 0 ].intensity = Zsym;
+		lightsP[ 1 ].intensity = Zsym;
+		lightsP[ 2 ].intensity = Zsym;
+		directionalLight.intensity = Zsym;
+		}); 
+	cubeD.onChange(function(value) 
+	{   Doption = value; }); 
+	varyColor.onChange(function(value) 
+	{   Rainbow = value; }); 
+	//TBlock.onChange(function(value) 
+	//{   TransparentBlock = value; }); 
+	Design.onChange(function(value) 
+	{   addTetraName = value; 
+		tetraName = value;
+		//Design2.Change(" "); 
+		if(addTetraName == "Original"){addTetraFlag = 0;}
+		if(addTetraName == "Geometric"){addTetraFlag = 1;}
+		if(addTetraName == "Spiral"){addTetraFlag = 2;}
+		if(addTetraName == "Pipes"){addTetraFlag = 3;}
+		if(addTetraName == "Clipped"){addTetraFlag = 4;}
+		if(addTetraName == "Cubes"){addTetraFlag = 5;}
+		if(addTetraName == "TetraFrame"){addTetraFlag = 6;}
+		if(addTetraName == "TetraMag"){addTetraFlag = 7;}
+		if(addTetraName == "Flower"){addTetraFlag = 8;}
+		if(addTetraName == "Triangles"){addTetraFlag = 9;} 
+		if(addTetraName == "TetraClip"){addTetraFlag = 10;}
+		if(addTetraName == "Esher Stair"){addTetraFlag = 17;} 
+		if(addTetraName == "Old Style"){addTetraFlag = 18;}
+		if(addTetraName == "FlatPack"){addTetraFlag = 19;}
+		if(addTetraName == "Cubic"){addTetraFlag = 20;}
+		if(addTetraName == "Modern"){addTetraFlag = 21;}
+		if(addTetraName == "DNA segment"){addTetraFlag = 22;}
+		if(addTetraName == "Oval"){addTetraFlag = 23;}
+		if(addTetraName == "Dragon"){addTetraFlag = 24;}
+		if(addTetraName == "Torus"){addTetraFlag = 25;}		
+		
+		// change in 180 Search Designs and 786 addTetraFlag>
+		camera.remove(objects[1]);
+		lightsP[ 0 ].color.setHex( 0x555555 );
+		//light3[ 0 ].color.setHex( 0xbbbbbb );
+		addTetraF();
+		}); 
+		Design2R.onChange(function(value) 
+	{   addTetraName2R = value;
+		tetraName = value; 
+		//Design.Change(" ");
+		if(addTetraName2R == "Sphere0"){addTetraFlag = 26;} 
+		if(addTetraName2R == "Sphere1"){addTetraFlag = 27;}
+		if(addTetraName2R == "Sphere2"){addTetraFlag = 28;} 
+		if(addTetraName2R == "Sphere3"){addTetraFlag = 29;}
+		if(addTetraName2R == "Sphere4"){addTetraFlag = 30;} 
+		camera.remove(objects[1]);
+		lightsP[ 0 ].color.setHex( 0x555555 );
+		//light3[ 0 ].color.setHex( 0xffffff );
+		//addTetraF();
+		addTetraF();
+		}); 
+		Design2.onChange(function(value) 
+	{   addTetraName2 = value; 
+		tetraName = value;
+		//Design.Change(" ");
+		if(addTetraName2 == "Globe1"){addTetraFlag = 11;} 
+		if(addTetraName2 == "Globe2"){addTetraFlag = 12;}
+		if(addTetraName2 == "Globe3"){addTetraFlag = 13;} 
+		if(addTetraName2 == "Globe4"){addTetraFlag = 14;}
+		if(addTetraName2 == "Globe5"){addTetraFlag = 15;} 
+		if(addTetraName2 == "Globe6"){addTetraFlag = 16;}
+		camera.remove(objects[1]);
+		lightsP[ 0 ].color.setHex( 0xffffff );
+		//light3[ 0 ].color.setHex( 0xffffff );
+		//addTetraF();
+		addTetraF();
+		}); 
+		Design3.onChange(function(value) 
+	{   addTetraName3 = value; 
+		//Design.Change(" ");
+		if(addTetraName3 == "QuadTri"){addTetraFlag = 31;} 
+		if(addTetraName3 == "HalfTetra"){addTetraFlag = 32;}
+		if(addTetraName3 == "Metalic1"){addTetraFlag = 33;} 
+		if(addTetraName3 == "Metalic2"){addTetraFlag = 34;}
+		//if(addTetraName3 == "Sphere4"){addTetraFlag = 35;} 
+		camera.remove(objects[1]);
+		lightsP[ 0 ].color.setHex( 0x555555 );
+		//light3[ 0 ].color.setHex( 0xffffff );
+		//addTetraF();
+		addTetraF();
+		}); 
+		Design4.onChange(function(value) //must be updated!!!
+	{   addTetraName3 = value; 
+		//Design.Change(" ");
+		if(addTetraName3 == "QuadTri"){addTetraFlag = 31;} 
+		if(addTetraName3 == "HalfTetra"){addTetraFlag = 32;}
+		if(addTetraName3 == "Metalic1"){addTetraFlag = 33;} 
+		if(addTetraName3 == "Metalic2"){addTetraFlag = 34;}
+		//if(addTetraName3 == "Sphere4"){addTetraFlag = 35;} 
+		camera.remove(objects[1]);
+		lightsP[ 0 ].color.setHex( 0x555555 );
+		//light3[ 0 ].color.setHex( 0xffffff );
+		//addTetraF();
+		addTetraF();
+		}); 
+		Design5.onChange(function(value) //working on this "Central Africa","Antartica","Eurasia","Australia","Canada","Americas","EsherStair","GoldCopper","BlueIce","Silver","Glass","Green","Sandstone"
+
+	{   addTextureName = value; 
+		//Design.Change(" ");
+		if(addTextureName == "Central Africa"){texFlag = 1;} 
+		if(addTextureName == "Antartica"){texFlag  = 2;}
+		if(addTextureName == "Eurasia"){texFlag  = 3;} 
+		if(addTextureName == "Australia"){texFlag  = 4;}
+		if(addTextureName == "Canada"){texFlag = 5;} 
+		if(addTextureName == "Americas"){texFlag  = 6;}
+		if(addTextureName == "EsherStair"){texFlag  = 7;} 
+		if(addTextureName == "GoldCopper"){texFlag  = 8;}
+		if(addTextureName == "BlueIce"){texFlag = 9;} 
+		if(addTextureName == "Silver"){texFlag  = 10;}
+		if(addTextureName == "Glass"){texFlag  = 11;} 
+		if(addTextureName == "Green"){texFlag  = 12;}
+		if(addTextureName == "Sandstone"){texFlag  = 13;} 
+		if(addTextureName == "Leaf"){texFlag  = 14;} 
+		if(addTextureName == "Heart"){texFlag  = 15;} 
+		if(addTextureName == "AddMonochrome"){texFlag  = 16;} 
+		if(addTextureName == " "){texFlag  = 0;}
+		//if(addTetraName3 == "Sphere4"){addTetraFlag = 35;} 
+		camera.remove(objects[1]);
+		lightsP[ 0 ].color.setHex( 0x555555 );
+		//light3[ 0 ].color.setHex( 0xffffff );
+		//addTetraF();
+		addTetraF();
+		}); 
+		DesignLoad2.onChange(function(value) // gui that loads designs-----------------------LOAD---------------------LOAD
+	{   //Load2 = text.Load_filename; 
+		if(value == '. ' || value == 'No file'){} else {
+		var loadxxx = value;
+		text.Load_filename = loadxxx;
+		Load2 = userLocalName[numUserL]+text.Load_filename;
+			for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}
+		parameters.Load2 = " Loaded";
+		console.log("loadingQQQz............."+Load2);
+		loaded = LoadUserFile(Load2);
+			console.log("loadingQQQ............."+Load2);
+			gui.close();
+	gui.open();
+		}
+		
+		}); 
+		CLoad2.onChange(function(value) // gui that loads colors-----------------------LOAD---------------------LOAD
+	{   //LoadC = text.C_filename;
+		if(value == '. ' || value == 'No file'){} else {
+		var loadxxxC = value; 
+		LoadC = value;
+		text.C_filename = value;
+		loadxxxC = userLocalName[numUserL]+text.Load_filename;
+			for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}
+		parameters.CLoad2 = " Loaded";
+		console.log("loadingQQQ............."+loadxxxC);
+		loaded = LoadUserFileC(loadxxxC,objects);
+			console.log("loadingQQQ............."+value);
+		gui.close();
+	gui.open();
+		}
+		}); 
+		
+		
+		MLoad2.onChange(function(value) //'visible', ["Sugar Man", "1","2","3", "4")
+	{   	
+	
+		visible = value; 
+		MusicTG.stop();
+		if(visible == "Silence"){} 
+		if(visible == "1"){playingNow = musicC[1];}
+		if(visible == "2"){playingNow = musicC[2];}
+		if(visible == "3"){playingNow = musicC[3];}
+		if(visible == "4"){playingNow = musicC[4];}
+		if(visible == "5"){playingNow = musicC[5];}
+		if(visible == "6"){playingNow = musicC[6];}
+		if(visible == "7"){playingNow = musicC[7];}
+		if(visible == "8"){playingNow = musicC[8];}
+		if(visible == "9"){playingNow = musicC[9];}
+		if(visible == "10"){playingNow = musicC[10];}
+		//Audio Audio Audio Audio Audio Audio Audio Audio Audio Audio Audio Audio
+	// load a resource
+loader.load(
+    // resource URL
+    playingNow,
+    // Function when resource is loaded
+    function ( audioBuffer ) {
+        // set the audio object buffer to the loaded object
+        MusicTG.setBuffer( audioBuffer );
+       // MusicTG.loop(audioBuffer);
+
+        // play the audio
+        MusicTG.play();
+        //MusicTG.stop();
+    },
+    // Function called when download progresses
+    function ( xhr ) {
+        console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+        console.log( playingNow +'  loaded' );
+    },
+    // Function called when download errors
+    function ( xhr ) {
+        console.log( 'An error happened' );
+    });
+		
+						
+	});
+	
+		saveO2.onChange(function(value) //Design Saved here -----------------------------------------SAVE-----------------------------------SAVE--------
+	{   
+								var retrievedObjectU = localStorage.getItem("USERS");
+								var USERS = JSON.parse(retrievedObjectU);
+								//Rainbow = USERS[0].Rainbow;
+								savedFiles = USERS[0].savedFiles;
+								numSavedFiles = USERS[0].savedFiles.length;
+								if(savedFiles[1] == 'No file'){
+									var fileNameTet = text.Save_filename;
+									var savename = userLocalName[numUserL]+fileNameTet;
+									savedFiles[1] = savename;
+								}else {
+								console.log(numSavedFiles , "  HoWWWWWWWWW5555555555555555555555")
+															
+		var fileNameTet = text.Save_filename;
+		console.log("saving.............");
+		//var savexxx = value;
+		text.Save_filename = fileNameTet;
+		
+		
+		var savename = userLocalName[numUserL]+fileNameTet;
+		savedFiles[numSavedFiles] = savename;
+		console.log( userLocalName[numUserL]+"  Saving users file: "+numUserL);
+		//userLocalName[numUserL]= parameters.uLocalName
+		
+		/*var USERS = [{
+			"userLocalName" : userLocalName,
+			"numUsers" : numUsers,
+			//"userLocalPass" : "**************QWERTUIOPASDFGHJKLZXCVBNMQAZWSXEDCRFVTGBYHNUJMIKOLP*****************"+userLocalPass,
+			//"Rainbow" : 'OFF',
+			"savedFiles" : savedFiles,
+			//"tetraName" : tetraName
+			}];
+		
+		userObject = JSON.stringify(USERS, null, 100);*/
+		var fileUser = savename;
+		console.log(savename+'ddddddddddddddddddddddddddd');
+		//localStorage.setItem(fileUser, userObject);	
+								}
+								var fileNameTet = text.Save_filename;
+								var savename = userLocalName[numUserL]+fileNameTet;
+								var fileUser = savename;
+		//localStorage.removeItem(fileUser); //qaz
+		exportToObj(userLocalName[numUserL],fileNameTet,fileUser,numUsers,numUserL);   //exportToObj(myFolder,fileNameTet);//old
+		console.log(savename+"vvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+		
+		numSavedFiles +=1;
+		parameters.Load2 = savedFiles;
+		parameters.LoadC = savedFiles;
+		parameters.DelFile = savedFiles;
+    parameters.uLocalName = userLocalName;
+    //gui.close();
+    //gui.open();
+			for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}
+			//gui.close();
+    //gui.open();
+    //var saveO2 = f2.remove( parameters, 'saveOBJ2'); 
+	parameters.saveOBJ2 = [" ", " Save... "]; 
+	parameters.Load2 = savedFiles;
+		parameters.LoadC = savedFiles;
+		parameters.DelFile = savedFiles;
+	parameters.uLocalName = userLocalName;
+	CLoad2.updateDisplay()
+			console.log(".........",savedFiles[1],"........",savedFiles[2]);
+			//window.location.reload(false);
+						
+	});
+	
+	delF.onChange(function(value) //delete design from localsorage
+	{   	
+		gui.close();
+		var fileNameTet = value;
+		console.log("saving.............");
+		//var savexxx = value;
+		text.D_filename = fileNameTet;
+		var atP = savedFiles.indexOf(fileNameTet);
+		console.log(atP + "   delete this locally");
+		localStorage.removeItem(userLocalName[numUserL]+fileNameTet);         //working fine
+		savedFiles.splice(atP,1);                    //working fine
+		console.log(savedFiles[0]," ",savedFiles[1]);
+		numSavedFiles -=1;
+		var USERS = [{
+			"Rainbow" : Rainbow,
+			"savedFiles" : savedFiles,
+			"tetraName" : tetraName
+			}];
+		userObject = JSON.stringify(USERS, null, 100);
+		var fileUser = "USERS";
+		localStorage.setItem(fileUser, userObject);	
+		
+		//save02 = savedFiles;
+		parameters.Load2 = savedFiles;
+		parameters.LoadC = savedFiles;
+		parameters.DelFile = savedFiles;
+    parameters.uLocalSelect = userLocalName;
+			for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+				var key = Object.keys(gui.__folders)[i];
+			for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+			{
+				gui.__folders[key].__controllers[j].updateDisplay();
+			}
+			}
+
+			gui.open();		
+			localStorage.removeItem(userLocalName[numUserL]+fileNameTet);         //working fine
+			window.location.reload(false);
+			
+	});
+	
+
+	
+	
+
+	///////////////////////////////////////////////////////////////////////////Menu change
+	
+	
+	cubeColor.onChange(function(value) // onFinishChange
+	{   materials[cii] = material15;
+		materials[cii].color.setHex( value.replace("#", "0x") ); 
+
+		 });
+		 
+
+	
+	gui.open();
+	
+	
+	
+								//Note that if you have the values in some folder folder1 the call is like this:
+
+/*for (var i = 0; i < gui.folder1.controllers.length; i++) {
+   gui.folder1.controllers[i].updateDisplay();
+}*/
+
+//If you do not want to hard-code folder1, or simply want to update all folders, you can proceed as follows:
+console.log(Rainbow);
+parameters.Rainbow = Rainbow;
+parameters.Load2 = savedFiles;
+parameters.LoadC = savedFiles;
+parameters.DelFile = savedFiles;
+parameters.uLocalName = userLocalName[numUserL];
+//parameters.addTetraName = addTetraUser;
+for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+    var key = Object.keys(gui.__folders)[i];
+    for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+    {
+        gui.__folders[key].__controllers[j].updateDisplay();
+    }
+}
+
+	
+	addTetra();
+    
+  for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+    var key = Object.keys(gui.__folders)[i];
+    for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+    {
+        gui.__folders[key].__controllers[j].updateDisplay();
+    }
+}
+  
+
+	
+	var newSphereGeom= new THREE.SphereGeometry(0.35,0.35,0.35);
+	var sphere= new THREE.Mesh(newSphereGeom, new THREE.MeshBasicMaterial({ color: 0xeeeeee }));
+	scene.add(sphere);
+	mouseSphere.push(sphere);
+	renderer.autoClear = false;
+	
+
+	
+
+			
+
+
+}
+
+
+function updateGuiT() //have to restart and load last file?
+{
+parameters.Rainbow = Rainbow;
+parameters.Load2 = savedFiles;
+parameters.LoadC = savedFiles;
+parameters.DelFile = savedFiles;
+parameters.uLocalName = [" ", "Create_User"];
+parameters.uLocalSelect = userLocalName;
+//parameters.addTetraName = addTetraUser;
+for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+    var key = Object.keys(gui.__folders)[i];
+    for (var j = 0; j < gui.__folders[key].__controllers.length; j++ )
+    {
+        gui.__folders[key].__controllers[j].updateDisplay();
+    }
+}
+console.log("should update the gui????")
+}
+function assignUVs(mesh) {
+
+    
+    mesh.faceVertexUvs[0] = [];
+
+    mesh.faces.forEach(function(face) {
+
+        var components = ['x', 'y', 'z'].sort(function(a, b) {
+            return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
+        });
+
+        var v1 = geometry.vertices[face.a];
+        var v2 = geometry.vertices[face.b];
+        var v3 = geometry.vertices[face.c];
+
+        geometry.faceVertexUvs[0].push([
+            new THREE.Vector2(v1[components[0]], v1[components[1]]),
+            new THREE.Vector2(v2[components[0]], v2[components[1]]),
+            new THREE.Vector2(v3[components[0]], v3[components[1]])
+        ]);
+
+    });
+
+    mesh.uvsNeedUpdate = true;
+}
+
+function addTetra()
+{
+
+            
+            
+	var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+
+					//console.log( item, loaded, total );
+
+				};
+
+			//	var texture = new THREE.Texture();
+			texture2 = new THREE.TextureLoader().load(textures[0]); //'models/obj/sandstone4.jpg'); //'textures/UV_Grid_Sm1.jpg');
+				console.log( texFlag, " texFlag" );
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						//console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					}
+				};
+
+				var onError = function ( xhr ) {
+				};
+
+
+				var loader = new THREE.ImageLoader( manager );
+				loader.load( textures[texFlag], function ( image ) {
+
+				//	texture.image = image;
+				//	texture.needsUpdate = true;
+
+				} );
+				//lambert = new THREE.MeshLambertMaterial({color: materials[cii].color, map: texture2});
+				lambert = new THREE.MeshPhongMaterial({ map: texture2});  
+				// model
+				
+				if (addTetraFlag == 0) {
+					console.log("flag1111");
+
+				
+				
+				
+				
+points = [
+    new THREE.Vector3( 8.7185,2.3127,0 ),
+    new THREE.Vector3( -8.7185,2.3127,0 ),
+    new THREE.Vector3( -5.8123,-2.3061,0),
+    new THREE.Vector3( 5.8123,-2.3061,0 ),
+    new THREE.Vector3( 8.7185,6.9315,8.0058),
+     new THREE.Vector3( -8.7185,6.9315,8.0058),
+      new THREE.Vector3( -5.8123,4.6221,12.0058),
+       new THREE.Vector3( 5.8123,4.6221,12.0058)
+];
+//points = points*10;
+
+ geometry = new THREE.ConvexGeometry( points );
+ geometry.faceVertexUvs[0].push([
+        new THREE.Vector3( 8.7185,2.3127,0 ),
+    new THREE.Vector3( -8.7185,2.3127,0 ),
+    new THREE.Vector3( -5.8123,-2.3061,0),
+    new THREE.Vector3( 5.8123,-2.3061,0 ),
+    new THREE.Vector3( 8.7185,6.9315,8.0058),
+     new THREE.Vector3( -8.7185,6.9315,8.0058),
+      new THREE.Vector3( -5.8123,4.6221,12.0058),
+       new THREE.Vector3( 5.8123,4.6221,12.0058)
+    ]);
+//}
+geometry.uvsNeedUpdate = true;
+//the face normals and vertex normals can be calculated automatically if not supplied above
+geometry.computeFaceNormals();
+geometry.computeVertexNormals();
+
+/*material = new THREE.MeshPhongMaterial( {
+    color: 0xff0000, 
+    shading: THREE.FlatShading
+} );*/
+mesh = null;
+map = new THREE.TextureLoader().load( "wood2.png" );
+				map.wrapS = map.wrapT = THREE.RepeatWrapping;
+				map.anisotropy = 32;
+				material = new THREE.MeshPhongMaterial( {map: map, color: 0xffaabb, side: THREE.DoubleSide, combine: THREE.MixOperation } );
+mesh = new THREE.Mesh( geometry, material );
+
+
+mesh.name = 'Surface';
+objects[0] = mesh.clone();    //clone
+objects[0].material = mesh.material.clone();
+//map.needsUpdate = true;
+scene.add( objects[0] );
+
+			}
+				
+				
+}
+
+
+
+
+
+
+function isOdd(num) { return num % 2;}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				mouseX = mouse.x;
+				mouseY = mouse.y;
+//checkSelection();
+
+			}
+			
+function onDocumentMouseMove( event ) {
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				mouseX = mouse.x;
+				mouseY = mouse.y;
+//checkSelection();
+
+			}
+function onDocumentMouseDown( event ) 
+{
+	// the following line would stop any other event handler from firing
+	// (such as the mouse's TrackballControls)
+	event.preventDefault();
+	
+	console.log("Click.");
+	
+	// update the mouse variable
+	switch ( event.button ) {
+    case 0: // left 
+        Tadd = 1;
+    case 1: // middle
+        break;
+    case 2: // right
+        Tadd = 0;
+}
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+	 
+
+	ray.setFromCamera(mouse, camera);
+
+	var intersects = ray.intersectObjects(scene.children, true);
+	//console.log(intersects[0])
+  
+	if ( intersects[0] != undefined ) {
+		
+		if ( intersects[0].object.name === 'Surface' ) {
+			if(Tadd != 0){
+				
+				INTERSECTED = intersects[ 0 ];
+					
+				
+   //var geometry2 = intersects[0].face.geometry;
+    
+    geoT  = intersects[0].object;
+  
+            var normal = intersects[0].face.normal.clone();
+            
+            //console.log( intersects[0].object.name + " " + intersects[0].face.a + " face id " + normal.x + " " + normal.y + " " + normal.z +" Normal");
+			
+            
+            var faceIndices = [ 'a', 'b', 'c' ];
+            faceIndices.a =  intersects[0].face.a;
+            faceIndices.b =  intersects[0].face.b;
+            faceIndices.c =  intersects[0].face.c;
+            var otherV = 999;
+           
+			for ( var ii = 0; ii <= 11; ii ++ ) {
+			var facei  = geoT.geometry.faces[ii].normal.clone();
+			var facein  = geoT.geometry.faces[ii].clone();
+			
+			//console.log(ii + " ii " + "faceind " + facein.a +" " + facein.b +" "+facein.c + "faceind xx " + faceIndices.a +" " + faceIndices.b +" "+faceIndices.c);
+			if(Math.round(facei.x*100)+(Math.round(facei.y*100)*100)+(Math.round(facei.z*100)*10000) == Math.round(normal.x*100)+Math.round(normal.y*100)*100+Math.round(normal.z*100)*10000){
+			//console.log(ii + " ii " + "faceind " + facein.a +" " + facein.b +" "+facein.c + "faceind xx " + faceIndices.a +" " + faceIndices.b +" "+faceIndices.c);
+			if(otherV == 999){
+				//console.log(geoT.geometry.faces[ii].a + " NotFound1");
+			//console.log(geoT.geometry.faces[ii].a + " Found1...........................................................................");
+			//console.log(facei.x + " " + facei.y + " " + facei.z +" NormalT");
+			if(facein.a != faceIndices.a & facein.a != faceIndices.b & facein.a != faceIndices.c){ otherV = facein.a;}
+			if(facein.b != faceIndices.a & facein.b != faceIndices.b & facein.b != faceIndices.c){ otherV = facein.b;}
+			if(facein.c != faceIndices.a & facein.c != faceIndices.b & facein.c != faceIndices.c){ otherV = facein.c;}
+			//console.log(ii + " ii" + "otherV " + otherV);
+		}
+	}
+}
+			if(otherV != 999){
+				//var fsum = faceIndices.a + faceIndices.b + faceIndices.c  + otherV;
+				var pCI = [faceIndices.a, faceIndices.b, faceIndices.c, otherV];//pointsclickedIndices
+				var pNCI = [90,90,90,90];//pointsclickedIndices
+				var gvf = 0; //geo vert found is none 
+				var pC = []; //createArray(4,3);  //pointsClicked[0,1] long and opposite from [2,3] short each xyz
+				var pNC = []; //createArray(4,3);  //pointsNotClicked[0,1] long and opposite from [2,3] short each xyz
+				for(gv = 0;gv<8; gv ++){ // 8 geometry vertices in shape
+					if(gv != faceIndices.a & gv != faceIndices.b & gv != faceIndices.c & gv != otherV){ //finds the points not clicked
+						pNCI[gvf] = gv;
+						gvf = gvf+1;
+					}
+				}
+				console.log(geoT.geometry.vertices[pCI[0]].x+" clicked: " + pCI[0] + faceIndices.b +faceIndices.c+otherV + " and not clicked: "+ pNCI[0]+ pNCI[1]+ pNCI[2]+ pNCI[3]);
+				//PointsClicked...................................................................................................START
+				var d1 = Math.pow(Math.pow(geoT.geometry.vertices[pCI[0]].x-geoT.geometry.vertices[pCI[1]].x,2) +
+							Math.pow(geoT.geometry.vertices[pCI[0]].y-geoT.geometry.vertices[pCI[1]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pCI[0]].z-geoT.geometry.vertices[pCI[1]].z,2),0.5);
+				var d2 = Math.pow(Math.pow(geoT.geometry.vertices[pCI[0]].x-geoT.geometry.vertices[pCI[2]].x,2) +
+							Math.pow(geoT.geometry.vertices[pCI[0]].y-geoT.geometry.vertices[pCI[2]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pCI[0]].z-geoT.geometry.vertices[pCI[2]].z,2),0.5);
+				var d3 = Math.pow(Math.pow(geoT.geometry.vertices[pCI[0]].x-geoT.geometry.vertices[pCI[3]].x,2) +
+							Math.pow(geoT.geometry.vertices[pCI[0]].y-geoT.geometry.vertices[pCI[3]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pCI[0]].z-geoT.geometry.vertices[pCI[3]].z,2),0.5);
+				var d4 = Math.pow(Math.pow(geoT.geometry.vertices[pCI[1]].x-geoT.geometry.vertices[pCI[2]].x,2) +
+							Math.pow(geoT.geometry.vertices[pCI[1]].y-geoT.geometry.vertices[pCI[2]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pCI[1]].z-geoT.geometry.vertices[pCI[2]].z,2),0.5);
+				var d5 = Math.pow(Math.pow(geoT.geometry.vertices[pCI[1]].x-geoT.geometry.vertices[pCI[3]].x,2) +
+							Math.pow(geoT.geometry.vertices[pCI[1]].y-geoT.geometry.vertices[pCI[3]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pCI[1]].z-geoT.geometry.vertices[pCI[3]].z,2),0.5);
+				var d6 = Math.pow(Math.pow(geoT.geometry.vertices[pCI[2]].x-geoT.geometry.vertices[pCI[3]].x,2) +
+							Math.pow(geoT.geometry.vertices[pCI[2]].y-geoT.geometry.vertices[pCI[3]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pCI[2]].z-geoT.geometry.vertices[pCI[3]].z,2),0.5);
+							 var a1 = [d1,d2,d3,d4,d5,d6];
+							 var b1 = [pCI[0],pCI[0],pCI[0],pCI[1],pCI[1],pCI[2]];
+							 var c1 = [pCI[1],pCI[2],pCI[3],pCI[2],pCI[3],pCI[3]];
+				for(ddd = 0;ddd<6; ddd ++){
+					if(Math.round(a1[ddd]*1) ==  17){
+						for(dd = 0;dd<6; dd ++){
+							if(Math.round(a1[dd]*1) ==  12){
+								var s = 100000;
+								pC[0] = Math.round(geoT.geometry.vertices[b1[ddd]].x*s)/s;
+								pC[1] = Math.round(geoT.geometry.vertices[b1[ddd]].y*s)/s;
+								pC[2] = Math.round(geoT.geometry.vertices[b1[ddd]].z*s)/s;
+								pC[3] = Math.round(geoT.geometry.vertices[c1[ddd]].x*s)/s;
+								pC[4] = Math.round(geoT.geometry.vertices[c1[ddd]].y*s)/s;
+								pC[5] = Math.round(geoT.geometry.vertices[c1[ddd]].z*s)/s;
+								pC[6] = Math.round(geoT.geometry.vertices[b1[dd]].x*s)/s;
+								pC[7] = Math.round(geoT.geometry.vertices[b1[dd]].y*s)/s;
+								pC[8] = Math.round(geoT.geometry.vertices[b1[dd]].z*s)/s;
+								pC[9] = Math.round(geoT.geometry.vertices[c1[dd]].x*s)/s;
+								pC[10] = Math.round(geoT.geometry.vertices[c1[dd]].y*s)/s;
+								pC[11] = Math.round(geoT.geometry.vertices[c1[dd]].z*s)/s;
+								console.log("top 6");
+							}
+						}
+					}
+				}
+				for(ddd = 0;ddd<6; ddd ++){
+					if(Math.round(a1[ddd]*1) ==  14){
+						for(dd = 0;dd<6; dd ++){
+							if(Math.round(a1[dd]*1) ==  9){
+								var s = 100000;
+								pC[0] = Math.round(geoT.geometry.vertices[b1[ddd]].x*s)/s;
+								pC[1] = Math.round(geoT.geometry.vertices[b1[ddd]].y*s)/s;
+								pC[2] = Math.round(geoT.geometry.vertices[b1[ddd]].z*s)/s;
+								pC[3] = Math.round(geoT.geometry.vertices[c1[ddd]].x*s)/s;
+								pC[4] = Math.round(geoT.geometry.vertices[c1[ddd]].y*s)/s;
+								pC[5] = Math.round(geoT.geometry.vertices[c1[ddd]].z*s)/s;
+								pC[6] = Math.round(geoT.geometry.vertices[b1[dd]].x*s)/s;
+								pC[7] = Math.round(geoT.geometry.vertices[b1[dd]].y*s)/s;
+								pC[8] = Math.round(geoT.geometry.vertices[b1[dd]].z*s)/s;
+								pC[9] = Math.round(geoT.geometry.vertices[c1[dd]].x*s)/s;
+								pC[10] = Math.round(geoT.geometry.vertices[c1[dd]].y*s)/s;
+								pC[11] = Math.round(geoT.geometry.vertices[c1[dd]].z*s)/s;
+								console.log("Right 6");
+							}
+						}
+					}
+				}
+				//END of PointsClicked...................................................................................................END
+//PointsNotClicked...................................................................................................START
+				var d1n = Math.pow(Math.pow(geoT.geometry.vertices[pNCI[0]].x-geoT.geometry.vertices[pNCI[1]].x,2) +
+							Math.pow(geoT.geometry.vertices[pNCI[0]].y-geoT.geometry.vertices[pNCI[1]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pNCI[0]].z-geoT.geometry.vertices[pNCI[1]].z,2),0.5);
+				var d2n = Math.pow(Math.pow(geoT.geometry.vertices[pNCI[0]].x-geoT.geometry.vertices[pNCI[2]].x,2) +
+							Math.pow(geoT.geometry.vertices[pNCI[0]].y-geoT.geometry.vertices[pNCI[2]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pNCI[0]].z-geoT.geometry.vertices[pNCI[2]].z,2),0.5);
+				var d3n = Math.pow(Math.pow(geoT.geometry.vertices[pNCI[0]].x-geoT.geometry.vertices[pNCI[3]].x,2) +
+							Math.pow(geoT.geometry.vertices[pNCI[0]].y-geoT.geometry.vertices[pNCI[3]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pNCI[0]].z-geoT.geometry.vertices[pNCI[3]].z,2),0.5);
+				var d4n = Math.pow(Math.pow(geoT.geometry.vertices[pNCI[1]].x-geoT.geometry.vertices[pNCI[2]].x,2) +
+							Math.pow(geoT.geometry.vertices[pNCI[1]].y-geoT.geometry.vertices[pNCI[2]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pNCI[1]].z-geoT.geometry.vertices[pNCI[2]].z,2),0.5);
+				var d5n = Math.pow(Math.pow(geoT.geometry.vertices[pNCI[1]].x-geoT.geometry.vertices[pNCI[3]].x,2) +
+							Math.pow(geoT.geometry.vertices[pNCI[1]].y-geoT.geometry.vertices[pNCI[3]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pNCI[1]].z-geoT.geometry.vertices[pNCI[3]].z,2),0.5);
+				var d6n = Math.pow(Math.pow(geoT.geometry.vertices[pNCI[2]].x-geoT.geometry.vertices[pNCI[3]].x,2) +
+							Math.pow(geoT.geometry.vertices[pNCI[2]].y-geoT.geometry.vertices[pNCI[3]].y,2) +
+							 Math.pow(geoT.geometry.vertices[pNCI[2]].z-geoT.geometry.vertices[pNCI[3]].z,2),0.5);
+							 var a2 = [d1n,d2n,d3n,d4n,d5n,d6n];
+							 var b2 = [pNCI[0],pNCI[0],pNCI[0],pNCI[1],pNCI[1],pNCI[2]];
+							 var c2 = [pNCI[1],pNCI[2],pNCI[3],pNCI[2],pNCI[3],pNCI[3]];
+				for(ddd = 0;ddd<6; ddd ++){
+					if(Math.round(a2[ddd]*1) ==  17){
+						var f1 = 0;
+						for(dd = 0;dd<6; dd ++){
+							if(Math.round(a2[dd]*1) ==  12){
+								var s = 100000;
+								pNC[0] = Math.round(geoT.geometry.vertices[b2[ddd]].x*s)/s;
+								pNC[1] = Math.round(geoT.geometry.vertices[b2[ddd]].y*s)/s;
+								pNC[2] = Math.round(geoT.geometry.vertices[b2[ddd]].z*s)/s;
+								pNC[3] = Math.round(geoT.geometry.vertices[c2[ddd]].x*s)/s;
+								pNC[4] = Math.round(geoT.geometry.vertices[c2[ddd]].y*s)/s;
+								pNC[5] = Math.round(geoT.geometry.vertices[c2[ddd]].z*s)/s;
+								pNC[6] = Math.round(geoT.geometry.vertices[b2[dd]].x*s)/s;
+								pNC[7] = Math.round(geoT.geometry.vertices[b2[dd]].y*s)/s;
+								pNC[8] = Math.round(geoT.geometry.vertices[b2[dd]].z*s)/s;
+								pNC[9] = Math.round(geoT.geometry.vertices[c2[dd]].x*s)/s;
+								pNC[10] = Math.round(geoT.geometry.vertices[c2[dd]].y*s)/s;
+								pNC[11] = Math.round(geoT.geometry.vertices[c2[dd]].z*s)/s;
+								console.log("Bottom 6");
+							}
+						}
+					}
+				}
+				for(ddd = 0;ddd<6; ddd ++){
+					if(Math.round(a2[ddd]*1) ==  14){
+						var f1 = 1;
+						for(dd = 0;dd<6; dd ++){
+							if(Math.round(a2[dd]*1) ==  9){
+								var s = 100000;
+								pNC[0] = Math.round(geoT.geometry.vertices[b2[ddd]].x*s)/s;
+								pNC[1] = Math.round(geoT.geometry.vertices[b2[ddd]].y*s)/s;
+								pNC[2] = Math.round(geoT.geometry.vertices[b2[ddd]].z*s)/s;
+								pNC[3] = Math.round(geoT.geometry.vertices[c2[ddd]].x*s)/s;
+								pNC[4] = Math.round(geoT.geometry.vertices[c2[ddd]].y*s)/s;
+								pNC[5] = Math.round(geoT.geometry.vertices[c2[ddd]].z*s)/s;
+								pNC[6] = Math.round(geoT.geometry.vertices[b2[dd]].x*s)/s;
+								pNC[7] = Math.round(geoT.geometry.vertices[b2[dd]].y*s)/s;
+								pNC[8] = Math.round(geoT.geometry.vertices[b2[dd]].z*s)/s;
+								pNC[9] = Math.round(geoT.geometry.vertices[c2[dd]].x*s)/s;
+								pNC[10] = Math.round(geoT.geometry.vertices[c2[dd]].y*s)/s;
+								pNC[11] = Math.round(geoT.geometry.vertices[c2[dd]].z*s)/s;
+								console.log("Left 6");
+							}
+						}
+					}
+				}
+//END of PointsNotClicked...................................................................................................END
+				console.log(pC[0], pC[1], pC[2], pC[3], pC[4], pC[5], pC[6], pC[7], pC[8], pC[9], pC[10], pC[11],
+    pNC[1] + 1.6*normal.x, pNC[1] + 1.6*normal.y, pNC[2] + 1.6*normal.z,
+     pNC[3] + 1.6*normal.x, pNC[4] + 1.6*normal.y, pNC[5] + 1.6*normal.z,
+     pNC[6] + 4.4*normal.x, pNC[7] + 2.4*normal.y, pNC[8] + 2.4*normal.z,
+    pNC[9] + 2.4*normal.x, pNC[10] + 2.4*normal.y, pNC[11] + 2.4*normal.z);
+	if(f1 == 0){		
+	 points = [
+    new THREE.Vector3( pC[0], pC[1], pC[2]),
+    new THREE.Vector3( pC[3], pC[4], pC[5]),
+    new THREE.Vector3( pC[6], pC[7], pC[8]),
+    new THREE.Vector3( pC[9], pC[10], pC[11]),
+    new THREE.Vector3( pNC[0] + 16*normal.x, pNC[1] + 16*normal.y, pNC[2] + 16*normal.z),
+    new THREE.Vector3( pNC[3] + 16*normal.x, pNC[4] + 16*normal.y, pNC[5] + 16*normal.z),
+    new THREE.Vector3( pNC[6] + 24*normal.x, pNC[7] + 24*normal.y, pNC[8] + 24*normal.z),
+    new THREE.Vector3( pNC[9] + 24*normal.x, pNC[10] + 24*normal.y, pNC[11] + 24*normal.z),
+];
+}
+if(f1 == 1){		
+	 points = [
+    new THREE.Vector3( pC[0], pC[1], pC[2]),
+    new THREE.Vector3( pC[3], pC[4], pC[5]),
+    new THREE.Vector3( pC[6], pC[7], pC[8]),
+    new THREE.Vector3( pC[9], pC[10], pC[11]),
+    new THREE.Vector3( pNC[0] + 18.81*normal.x, pNC[1] + 18.81*normal.y, pNC[2] + 18.81*normal.z),
+    new THREE.Vector3( pNC[3] + 18.81*normal.x, pNC[4] + 18.81*normal.y, pNC[5] + 18.81*normal.z),
+    new THREE.Vector3( pNC[6] + 28.21*normal.x, pNC[7] + 28.21*normal.y, pNC[8] + 28.21*normal.z),
+    new THREE.Vector3( pNC[9] + 28.21*normal.x, pNC[10] + 28.21*normal.y, pNC[11] + 28.21*normal.z),
+];
+}
+
+					 i = i+1;
+    //
+                    //objects[i].material = mesh.material.clone();
+                   // console.log(i + " i " + points[4].z + " " + points[5].x + " " + points[5].z +" NormalThhhhhhhhhhhhhhh");
+    geometry = new THREE.ConvexGeometry( points );
+//the face normals and vertex normals can be calculated automatically if not supplied above
+geometry.computeFaceNormals();
+geometry.computeVertexNormals();
+//console.log("Nothin done.....ormalThhhhhhhhhhhhhhh");
+/*material = new THREE.MeshPhongMaterial( {
+    color: 0xffff00, 
+    shading: THREE.FlatShading
+} ); */
+materials[i] = lambert; //material;
+map.needsUpdate = true;
+					
+				if(Rainbow == "Random"){
+					var tempColor = ('000000'+materials[cii].color.getHex().toString(16)).slice(-6)
+					var nextColor = Math.floor((Math.random()*28+70)) +100*Math.floor((Math.random()*28+70))+10000*Math.floor((Math.random()*28+70));
+					console.log("nextcolour " + nextColor);
+					materials[i].color.setHex( "0x"+nextColor);
+				}
+				if(Rainbow == "Greys"){
+					//var tempColor = ('000000'+materials[cii].color.getHex().toString(16)).slice(-6)
+					var shade = Math.floor(Math.random()*80+17);
+					var shadeG = shade.toString(16);
+					
+					materials[cii].color.setHex( "0x"+shadeG+shadeG+shadeG);
+				}
+				if(Rainbow == "Greens"){
+					//var tempColor = ('000000'+materials[cii].color.getHex().toString(16)).slice(-6)
+					var shade = Math.floor(Math.random()*80+17);
+					var shadeG = shade.toString(16);
+					var nextColor = "ff";
+					materials[i].color.setHex( "0x"+shadeG+nextColor+shadeG);
+				}
+				if(Rainbow == "Reds"){
+					var shade = Math.floor(Math.random()*80+17);
+					var shadeG = shade.toString(16);
+					var nextColor = "ff";
+					materials[cii].color.setHex( "0x"+nextColor+shadeG+shadeG);
+					//console.log("0x"+nextColor+shadeG+shadeG);
+				}
+				if(Rainbow == "Blues"){
+					var shade = Math.floor(Math.random()*80+17);
+					var shadeG = shade.toString(16);
+					var nextColor = "ff";
+					materials[i].color.setHex( "0x"+shadeG+shadeG+nextColor);
+					//var nextColor = (Math.floor((Math.random()*254.9+1))+65536).toString(16); //Math.floor(Math.random()*16777215).toString(16);
+					//materials[cii].color.setHex( "0x"+nextColor);
+				}
+				if(Rainbow == "Yellow/Blue"){
+					materials[i].color.setHex(colcol);
+					if(colcol  == "0x2222cc"){ //'000000'+color.getHex().toString(16)).slice(-6) 
+						colcol = "0x555500"}
+						else{colcol = "0x2222cc"}
+				
+					materials[i].color.setHex( colcol); //0x4444ff blue 0xee4444 pink 0xeeee00 yellow
+				}
+				
+			
+					//if(TransparentBlock = "False"){
+						lambert = new THREE.MeshLambertMaterial({color: materials[cii].color, map: texture2}); //, transparent: true, opacity: 0.5});
+					//}
+					//if(TransparentBlock = "True"){
+						//lambert = new THREE.MeshLambertMaterial({color: materials[cii].color, map: texture2, transparent: false, opacity: 0.6,depthWrite: false});
+					//}
+					//var pos= Math.floor((Math.random() * materials[cii].length));
+					//materials[cii].material.color.setHex( 0x0000ff );
+					//objects[cii].material = lambert;
+					
+
+
+//mesh = null;
+var tempColor = ('000000'+materials[cii].color.getHex().toString(16)).slice(-6)
+					var rr = Math.random();
+					var rs = Math.random();
+					var nextColor = Math.floor((rr*98.9+1)) +100*Math.floor(((1-rr)*98.9+1))+10000*Math.floor(((1-rr-rs)*98.9+1));
+					//console.log("nextcolour " + nextColor);
+					materials[i].color.setHex( "0x"+nextColor);
+					material = new THREE.MeshLambertMaterial( { map: map, color: nextColor,  side: THREE.DoubleSide, combine: THREE.MixOperation } ); //map: map, maprepeat : [2,2], 
+					
+mesh = new THREE.Mesh( geometry, material);
+
+
+
+mesh.name = 'Surface';
+objects[i] = mesh.clone();    //clone
+objects[i].material = mesh.material.clone();
+console.log("sceneAdd.....NormalThhhhhhhhhhhhhhh");
+//map.needsUpdate = true;
+scene.add( objects[i] );
+	
+//scene.add(objects[i]);
+					
+					
+				
+			
+			}
+			
+
+		}
+
+	}
+	
+	if(Tadd == 0){
+	var intersect = intersects[ 0 ];
+					scene.remove(intersect.object);					
+		}
+} 
+}
+
+
+
+
+function onDocumentKeyDown( event ) {
+	
+				
+
+				switch( event.keyCode ) {
+
+					case 16: isShiftDown = true; break;
+				
+
+				}
+
+			}
+
+			function onDocumentKeyUp( event ) {
+
+				switch ( event.keyCode ) {
+
+					case 16: isShiftDown = false; break;
+
+				}
+
+			}
+
+
+			//
+
+	function animate() 
+{
+    
+    requestAnimationFrame( animate );
+   
+	render();		
+	update();
+	 
+}
+
+function flyTrack() {
+
+    var prevCamera = camera;
+    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+	  var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.01, FAR = 20000;
+		camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+    camera.position.copy( prevCamera.position );
+    camera.rotation.copy( prevCamera.rotation );
+
+    var MODE = { TRACKBALL: 0, FLY: 1 };
+
+    switch( mode ) {
+
+        case MODE.FLY:
+
+            controls = new THREE.TrackballControls( camera );
+
+            mode = MODE.TRACKBALL;
+
+            break;
+
+        case MODE.TRACKBALL:
+
+            controls = new THREE.FlyControls( camera );
+
+            mode = MODE.FLY;
+
+            break;
+
+    }
+
+}
+
+function update()
+{
+	keyboard.update();
+	var angleOb = Math.PI;
+	//if ( keyboard.pressed("S") ) {
+					//exportToObj();
+					//console.log("PPressed");
+				//}
+			//	if ( keyboard.pressed("C") ) {
+			//		flyTrack();
+					
+			//	}
+
+					
+				
+
+
+
+    
+	
+	
+	
+	controls.update();
+	
+	 
+	checkHighlight();
+	CheckMouseSphere();
+	
+	
+
+}  //End of function update
+function checkHighlight(){
+	// find intersections
+	// create a Ray with origin at the mouse position
+	//   and direction into the scene (camera direction)
+	var vector = new THREE.Vector3( mouse.x, mouse.y, 0.999 );
+	vector.unproject( camera );
+	var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+	// create an array containing all objects in the scene with which the ray intersects
+	var intersects = ray.intersectObjects( targetList );
+
+	// INTERSECTED = the object in the scene currently closest to the camera 
+	//		and intersected by the Ray projected from the mouse position 	
+	
+	// if there is one (or more) intersections
+	if ( intersects.length > 0 )
+	{	// case if mouse is not currently over an object
+		if(INTERSECTED==null){
+			INTERSECTED = intersects[ 0 ];
+			INTERSECTED.face.color = cubeColor; //highlightedColor;
+		}
+		else{	// if thse mouse is over an object
+			INTERSECTED.face.color= baseColor;
+			INTERSECTED.object.geometry.colorsNeedUpdate=true;
+			INTERSECTED = intersects[ 0 ];
+			INTERSECTED.face.color = cubeColor; //highlightedColor;	
+      ////console.log("FaceColor @ " + INTERSECTED.face.color );
+		}
+		// upsdate mouseSphere coordinates and update colors
+		mouseSphereCoords = [INTERSECTED.point.x,INTERSECTED.point.y,INTERSECTED.point.z];
+		INTERSECTED.object.geometry.colorsNeedUpdate=true;
+		
+	} 
+	else // there are no intersections
+	{
+		// restore previous intersection object (if it exists) to its original color
+		if ( INTERSECTED ){
+			INTERSECTED.face.color = baseColor;
+			INTERSECTED.object.geometry.colorsNeedUpdate=true;
+		}
+		// remove previous intersection object reference
+		//     by setting current intersection object to "nothing"
+		
+		INTERSECTED = null;
+		mouseSphereCoords = null;
+		
+		
+	}
+}
+
+function CheckMouseSphere(){
+	// if the coordinates exist, make the sphere visible
+	if(mouseSphereCoords != null){
+		
+		mouseSphere[0].position.set(mouseSphereCoords[0],mouseSphereCoords[1],mouseSphereCoords[2]);
+		mouseSphere[0].visible = true;
+		
+	}
+	else{ // otherwise hide the sphere
+		mouseSphere[0].visible = false;
+	
+	}
+
+}
+function render() 
+{
+	//var timer = Date.now() * 0.00025;
+	//particleLight.position.z = Math.cos( timer * 3 ) * 1100;
+	if (Doption == "OFF") {
+    renderer.clear(); // <-
+    //renderer.render(backgroundScene, backgroundCamera);
+    
+	renderer.render( scene, camera );
+}
+if (Doption == "Anaglyph") {
+	anaglyphRenderer.render( scene, camera );
+}
+if (Doption == "Side-by-Side") {
+// Render the scene
+//stereoRenderer.render( scene, camera );
+//VRRenderer.render( scene, camera );
+OcRenderer.render( scene, camera );
+}
+}
+
+</script>
+
+	
+			
+</body>
+</html>
